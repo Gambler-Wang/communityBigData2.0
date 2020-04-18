@@ -1,0 +1,86 @@
+/*整体浏览器修改*/
+body{
+    scrollbar-arrow-color: red; /*上下按钮上三角箭头的颜色*/
+    scrollbar-face-color: #CBCBCB; /*滚动条凸出部分的颜色*/
+    scrollbar-3dlight-color: blue; /*滚动条亮边的颜色*/
+    scrollbar-highlight-color: #333; /*滚动条空白部分的颜色*/
+    scrollbar-shadow-color: yellow; /*滚动条阴影的颜色*/
+    scrollbar-darkshadow-color: green; /*滚动条强阴影的颜色*/
+    scrollbar-track-color: #eee; /*滚动条背景颜色*/
+    scrollbar-base-color: #f1f3f5; /*滚动条的基本颜色*/
+    font-family: "Microsoft YaHei";
+}
+::-webkit-scrollbar {  /* 滚动条整体部分 */
+    width:5px;
+    margin-right:2px
+}
+/*::-webkit-scrollbar-button { !* 滚动条两端的按钮 *!*/
+    /*display: none;*/
+    /*width:5px;*/
+    /*background-color: #f1f3f5;*/
+/*}*/
+::-webkit-scrollbar:horizontal {
+    height:5px;
+    margin-bottom:2px
+}
+/*::-webkit-scrollbar-track {  !* 外层轨道 *!*/
+    /*!*border-radius: 10px;*!*/
+  /*display: none;*/
+  /*border: 0;*/
+  /*visibility: hidden;*/
+/*}*/
+/*::-webkit-scrollbar-track-piece {  !*内层轨道，滚动条中间部分 *!*/
+    /*background-color: #e7f4f0;*/
+  /*display: none;*/
+  /*border: 0;*/
+  /*visibility: hidden;*/
+    /*!*border-radius: 10px;*!*/
+/*}*/
+::-webkit-scrollbar-thumb {  /* 滑块 */
+    width:5px;
+    border-radius: 5px;
+    background: #ddd;
+}
+.el-pagination {
+  padding: 16px 5px;
+}
+.el-tabs__item {
+  font-size: 16px;
+  font-weight: 800;
+}
+/*.el-form-item--small.el-form-item {*/
+   /*margin-top: 0px !important;*/
+   /*margin-bottom: 10px !important;*/
+/*}*/
+/*::-webkit-scrollbar-corner { !* 边角 *!*/
+    /*width: 5px;*/
+    /*background-color: #ddd;*/
+/*}*/
+/*::-webkit-scrollbar-thumb:hover { !* 鼠标移入滑块 *!*/
+    /*background: #ddd;*/
+/*}*/
+
+/*表格内字体修改*/
+.el-table td, .el-table th {
+  font-size:14px;
+  font-family:MicrosoftYaHei;
+  font-weight:400;
+  /*color:#535d67;*/
+}
+/*表格斑马颜色*/
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  /*background-color: #ecf1ff !important*/
+}
+/*表格hover颜色修改*/
+/* .el-table--enable-row-hover .el-table__body tr:hover>td{
+  background-color: #1F49BF !important;
+  color: #fff !important;
+} */
+/* elementUI tooltip修改 */
+.el-tooltip__popper {
+  max-width: 400px;
+  line-height: 180%;
+}
+
+
+

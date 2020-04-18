@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+    <meta name="renderer" content="webkit">
+    <title>RTMP播放协议</title>
+    <style>
+        body{margin:0;}
+        #myPlayer{max-width: 1200px;width: 100%;}
+    </style>
+</head>
+<script>
+</script>
+<body>
+<!--<script src="./../ezuikit.js"></script>-->
+<script src="https://open.ys7.com/sdk/js/2.0/ezuikit.js"></script>
+<script src="./../js/jquery.min.js"></script>
+<!--<video id="myPlayer" controls playsInline webkit-playsinline autoplay>-->
+    <!--<source src="rtmp://rtmp01open.ys7.com/openlive/f9bef4cf4d0e4a02b4046904f1dc884a.hd" type="rtmp/flv" />-->
+<!--</video>-->
+<!--<div id="myPlayer"></div>-->
+<video id="myPlayer" controls playsInline webkit-playsinline autoplay>
+    <source src="rtmp://rtmp01open.ys7.com/openlive/9d8c9142986244c18810a7d1a1b730ee.hd" type="rtmp/flv" />
+</video>
+ <div class="btnBox">
+     <button onmousedown="direction(0)" onmouseup="stop(0)">上</button>
+     <button onmousedown="direction(1)" onmouseup="stop(1)">下</button>
+     <button onmousedown="direction(2)" onmouseup="stop(2)">左</button>
+     <button onmousedown="direction(3)" onmouseup="stop(3)">右</button>
+     <button onmousedown="direction(4)" onmouseup="stop(4)">左上</button>
+     <button onmousedown="direction(5)" onmouseup="stop(5)">左下</button>
+     <button onmousedown="direction(6)" onmouseup="stop(6)">右上</button>
+     <button onmousedown="direction(7)" onmouseup="stop(7)">右下</button>
+     <button onmousedown="direction(8)" onmouseup="stop(8)">放大</button>
+     <button onmousedown="direction(9)" onmouseup="stop(9)">缩小</button>
+     <button onmousedown="direction(10)" onmouseup="stop(10)">近焦距</button>
+     <button onmousedown="direction(11)" onmouseup="stop(11)">远焦距</button>
+ </div>
+
+</body>
+</html>
+<!--<script src="../js/jquery.min.js"></script>-->
+<script>
+    var player = new EZuikit.EZUIPlayer('myPlayer');
+    // var player = new EZuikit.EZUIPlayer('myPlayer');
+    // var player = new EZUIPlayer({
+    //     id: 'myPlayer',
+    //     url:'rtmp://rtmp01open.ys7.com/openlive/78cc5aaa7b364f8faa0e80e0d56957fb.hd', // ezopen播放地址逗号分隔
+    //     autoplay: true,
+    //     accessToken: "at.dkwwfbix6mv5ofkv8jagnvq3ag1kcc11-3npo2e7sdj-1c86d26-llfkwb1ma",
+    //     decoderPath: '{{location path}}',
+    //     width: 1200, // 宽度高度为容器规格，将按照窗口数均分
+    //     height: 800,
+    //     splitBasis: 2 //设置窗口切割参数
+    // });
+    // 日志
+    // player.on('log', log);
+    // player2.on('log', log);
+
+    // function log(str){
+    //     var div = document.createElement('DIV');
+    //     div.innerHTML = (new Date()).Format('yyyy-MM-dd hh:mm:ss.S') + JSON.stringify(str);
+    //     document.body.appendChild(div);
+    // }
+    function direction(num) {
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/device/ptz/start",
+            data: {accessToken:'at.dkwwfbix6mv5ofkv8jagnvq3ag1kcc11-3npo2e7sdj-1c86d26-llfkwb1ma', deviceSerial:'C16525602',channelNo:1,direction: num,speed:1},
+            dataType: "json",
+            success: function(data){
+
+            }
+        });
+    }
+    function stop(num) {
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/device/ptz/stop",
+            data: {accessToken:'at.dkwwfbix6mv5ofkv8jagnvq3ag1kcc11-3npo2e7sdj-1c86d26-llfkwb1ma', deviceSerial:'C16525602',channelNo:1,direction: num,speed:1},
+            dataType: "json",
+            success: function(data){
+
+            }
+        });
+    }
+</script>

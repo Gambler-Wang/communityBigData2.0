@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <title>EZOPEN播放协议</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    .hint {
+      font-size: 14px;
+      line-height: 3em;
+      color: gray;
+    }
+    #url,
+    #url2,
+    #accessToken {
+      width: 100%;
+    }
+
+    .btn-container {
+      margin: 10px;
+    }
+    .normal {
+      color: green;
+      margin: 5px;
+    }
+    .error {
+      color: red;
+      margin: 5px;
+    }
+  </style>
+</head>
+<script>
+</script>
+
+<body>
+  <script src="../ezuikit.js"></script>
+  <!--<script src="https://open.ys7.com/sdk/js/2.0/ezuikit.js"></script>-->
+   <!--<script src="../js/jsPlugin-1.2.0.js"></script>-->
+   <!--<script src="https://cdn.jsdelivr.net/bluebird/latest/bluebird.min.js"></script>-->
+  <div class="hint">demo页面仅为代码示例无法直接运行，需要部署到服务器上才可以播放。另外监控模式与多窗口模式对浏览器版本有要求：Chrome: 55+ Firefox: V55+。</div>
+  <script src="../js/jquery.min.js"></script>
+  <h2>预览，回放 多窗口模式示例：</h2>
+  <!-- <p>ezopen地址用逗号分隔</p> -->
+  <!--<textarea id="url" placeholder="这里输入ezopen地址"></textarea>-->
+  <!--<textarea id="accessToken" placeholder="这里输入accessToken"></textarea>-->
+  <div class="btn-container">
+    <button id="init">开始初始化</button>
+    <button id="start">初始化播放</button>
+    <button id="stop">全部结束</button>
+  </div>
+  <div class="btnBox">
+    <button onmousedown="direction(0)" onmouseup="stop(0)">上</button>
+    <button onmousedown="direction(1)" onmouseup="stop(1)">下</button>
+    <button onmousedown="direction(2)" onmouseup="stop(2)">左</button>
+    <button onmousedown="direction(3)" onmouseup="stop(3)">右</button>
+    <button onmousedown="direction(4)" onmouseup="stop(4)">左上</button>
+    <button onmousedown="direction(5)" onmouseup="stop(5)">左下</button>
+    <button onmousedown="direction(6)" onmouseup="stop(6)">右上</button>
+    <button onmousedown="direction(7)" onmouseup="stop(7)">右下</button>
+    <button onmousedown="direction(8)" onmouseup="stop(8)">放大</button>
+    <button onmousedown="direction(9)" onmouseup="stop(9)">缩小</button>
+    <button onmousedown="direction(10)" onmouseup="stop(10)">近焦距</button>
+    <button onmousedown="direction(11)" onmouseup="stop(11)">远焦距</button>
+  </div>
+  <div id="playWind" style="width: 1200px; height: 800px;">
+  </div>
+  <script>
+    var decoder;
+    $("#init").click(function () {
+      // var url = $('#url').val().trim();
+      // var accessToken = $('#accessToken').val().trim();
+        var accessToken = 'at.9v09xlgs3i2b09rvdwfvjuvsbrthfgp1-3npo2t61df-0d0k2x0-9z8xriwbh';
+      decoder = new EZUIKit.EZUIPlayer({
+        id: 'playWind',
+        autoplay: true,
+        url: 'ezopen://open.ys7.com/C60982396/1.live,ezopen://open.ys7.com/C60982396/2.live,ezopen://open.ys7.com/C60982396/3.live,ezopen://open.ys7.com/C60982396/4.live',
+        accessToken: accessToken,
+        decoderPath: '../',
+        width: 1200,
+        height: 800,
+        splitBasis: 2, // 1*1 2*2 3*3 4*4
+      });
+      // 这里是打印日志，本例抛出到播放页面
+      // decoder.on('log', log);
+      // function log(str,className) {
+      //   var div = document.createElement('DIV');
+      //   div.className=className || 'normal';
+      //   div.innerHTML = (new Date()).Format('yyyy-MM-dd hh:mm:ss.S') + JSON.stringify(str);
+      //   document.body.appendChild(div);
+      // }
+      $("#start").click(function () {
+        decoder.play({
+          //index:[0,1],
+          // handleError: handleError,
+          // handleSuccess: handleSuccess,
+        });
+      });
+      $("#stop").click(function () {
+        decoder.stop(0);
+        decoder.stop(1);
+        decoder.stop(2);
+        decoder.stop(3);
+      })
+
+    });
+    function direction(num) {
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/device/ptz/start",
+            data: {accessToken:'at.dkwwfbix6mv5ofkv8jagnvq3ag1kcc11-3npo2e7sdj-1c86d26-llfkwb1ma', deviceSerial:'C16525602',channelNo:1,direction: num,speed:1},
+            dataType: "json",
+            success: function(data){
+
+            }
+        });
+    }
+    function stop(num) {
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/device/ptz/stop",
+            data: {accessToken:'at.dkwwfbix6mv5ofkv8jagnvq3ag1kcc11-3npo2e7sdj-1c86d26-llfkwb1ma', deviceSerial:'C16525602',channelNo:1,direction: num,speed:1},
+            dataType: "json",
+            success: function(data){
+
+            }
+        });
+    }
+  </script>
+</body>
+
+</html>
