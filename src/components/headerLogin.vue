@@ -7,7 +7,7 @@
       </div>
       <div class="right">
         <div class="community-btn">
-           <el-select @change="changeCommunity"  v-model="communityCode"
+           <el-select @change="changeCommunity"  v-if="accType==='1'|| accType==='3'" v-model="communityCode"
                   placeholder="请选择社区">
               <el-option v-for="item of communityData" :key="item.keyValue" 
                 :label="item.keyValue"
@@ -37,6 +37,7 @@ export default {
   inject:['reload'],
   data() {
     return {
+      accType: this.getCookie('accType'),
       communityCode:'YT-A2',
       communityData:[
         {
@@ -48,14 +49,44 @@ export default {
     }
   },
   created(){
-    
+    this.communityCodeSelect();
   },
   mounted() {
 
   },
   methods: {
-    changeCommunity(){
-
+    changeCommunity(communityCode){
+      this.request(this.api.getToken, {
+        account: this.getCookie('account'),
+        communityCode: communityCode
+      }, 'post').then(res => {
+        if (res.code === 200) {
+          // this.delCookie('token');
+          this.setCookie('token', res.data.accessToken, res.data.expiresIn);
+          this.$message({
+            message: res.msg,
+            type: 'success'
+          });
+          this.$emit('_changeCommunity')
+          // this.$refs.vTags.closeAll()
+          // this.$go('/index')
+        }
+      })
+    },
+    communityCodeSelect() {
+      let _this = this
+      this.request(this.api.communityCodeSelect, {account: this.getCookie('account'),}, 'post').then(res => {
+        if (res.code === 200) {
+          if (res.data.length > 0) {
+            this.communityData = res.data
+            this.communityData.forEach(function (item) {
+              if (item.isDefault === 1) {
+                _this.communityCode = item.keyCode;
+              }
+            })
+          }
+        }
+      })
     },
     handleFullScreen(){
       if(this.isFullScreen){
@@ -68,7 +99,8 @@ export default {
     },
     exit(){
       this.$exitFullScreen();
-      window.location.href='https://www.xhuachina.com:8443/smartcommunity/index.html';
+      window.location.href='/zhsq/serverIndex';
+      // this.$go('/login')
     }
   }
 }

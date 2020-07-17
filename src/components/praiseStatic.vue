@@ -4,22 +4,22 @@
       <div class="label">
         <div>
           <i style="background:#89FFE7;"></i>
-          进
+          表扬
         </div>
         <div>
           <i style="background:#FF9C9E;"></i>
-          出
+          投诉
         </div>
       </div>
       <div class="info">
         <div>
           <div>
-            <p>历史收到</p>
+            <p>今天收到</p>
             <p>表扬</p>
           </div>
           <p>
             <animated-number 
-              :value="complaintsData.praiseData" 
+              :value="complaintsData.todayPraise" 
               :formatValue="formatToCount"
               :duration="1200"
             ></animated-number>  
@@ -27,12 +27,12 @@
         </div>
         <div>                       
           <div>
-            <p>历史收到</p>
+            <p>今天收到</p>
             <p>投诉</p>
           </div>
           <p>
             <animated-number 
-              :value="complaintsData.complaint" 
+              :value="complaintsData.todayComplaint" 
               :formatValue="formatToCount"
               :duration="1200"
             ></animated-number>  
@@ -104,7 +104,7 @@ export default {
           },
           xAxis: {
               type: 'category',
-              data: this.complaintsData.commentType,
+              data: this.complaintsData.complaintType,
               nameTextStyle:{
                 color:'#4D5470',
               },
@@ -159,7 +159,7 @@ export default {
                   shadowColor: 'rgba(0, 0, 0, 0.5)'
                 },
               },
-              data: this.complaintsData.praiseCommentTypeData,
+              data: this.complaintsData.praiseData,
             },
             {
               type: 'bar',
@@ -174,7 +174,7 @@ export default {
                   shadowColor: 'rgba(0, 0, 0, 0.5)'
                 },
               },
-              data: this.complaintsData.complaintCommentTypeData,
+              data: this.complaintsData.complaintData,
             },
           ]
           
@@ -192,18 +192,22 @@ export default {
     position: relative;
     & .label{
       position: absolute;
-      width: 80px;
+      width: 98px;
       height: 48px;
       top: 0;
       right:30px;
       display: flex;
       align-items: center;
       &>div{
+        width: 50px;
         color: #B5EFFE;
         font-size: 12px;
         display: flex;
         align-items: center;
         margin-right: 14px;
+        &:nth-last-of-type(1){
+          margin-right: 0;
+        }
         i{
           width: 12px;
           height: 12px;

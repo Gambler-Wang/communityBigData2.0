@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import axios from 'axios';
-// import {API_BASE_URL} from '@/config/app.js'
+import {API_BASE_URL} from '@/config/app.js'
 import {Message} from 'element-ui'
 const _this = new Vue();
-// axios.defaults.baseURL = API_BASE_URL;
+axios.defaults.baseURL = API_BASE_URL;
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -108,11 +108,16 @@ axios.interceptors.response.use(res=>{
             type:'error',
             message:res.data.msg
         });
-        setTimeout(function () {
-          window.location.href = '/';
-        },1500)
+        // setTimeout(function () {
+        //   window.location.href = '/';
+        // },1500)
       }
-
+      if(res.data.code === 400 || res.data.code === 500){
+        _this.$message({
+            type:'error',
+            message:res.data.msg
+        });
+      }
     // if(res.data.code === 100001 || res.data.code===100081 || res.data.code ===100201 ||res.data.code ==="10005" || res.data.code === 100101 || res.data.code === 100102 || res.data.code === 100103 || res.data.code === 100091 || res.data.code === 100071
     // ){
     //     return res;

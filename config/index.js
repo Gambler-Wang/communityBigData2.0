@@ -11,13 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/xhkj':{
-          target:'https://www.xhuachina.com:8443/smartcommunity/xhkj',
-          changeOrigin:true,
-          pathRewrite:{
-            '^/xhkj':'',
-          }
-      }
+      // '/xhkj':{
+      //     target:'https://www.xhuachina.com:8443/smartcommunity/xhkj',
+      //     changeOrigin:true,
+      //     pathRewrite:{
+      //       '^/xhkj':'',
+      //     }
+      // }
     },
 
     // Various Dev Server settings

@@ -1,7 +1,7 @@
 <template>
   <section id="index">
     <div class="header">
-      <HeaderLogin />
+      <HeaderLogin @_changeCommunity="_changeCommunity" />
     </div>
     <div class="row row-1">
       <div class="basic-card-box">
@@ -12,7 +12,7 @@
           <DepartmentCard :departUserData="departUserData" />
         </div>
         <div class="scheduling-static-box">
-          <SchedulingCard :schedulingData="schedulingData" :isNoScheduling="isNoScheduling" />
+          <SchedulingCard :schedulData="schedulData" :attendanceList="attendanceList" :isNoScheduling="isNoScheduling" />
         </div>
       </div>
     </div>
@@ -78,7 +78,7 @@
     },
     data() {
       return {
-        videoUrl:'https://flvopen.ys7.com:9188/openlive/2509401a1e3948aeb5bb6afc65f7b134.flv',
+        videoUrl:'',
         basicCardData:{
           pavilionData:1,
           newPavilionData:0,
@@ -107,7 +107,8 @@
           workerData: 0,
           deptUserList:[]
         },
-        schedulingData:[],
+        schedulData:[],
+        attendanceList:[],
         isNoScheduling:false,
         carInOutData:{
           carInData: [],
@@ -135,25 +136,29 @@
           praiseData: 0,
         },
         personInOutData:{
-          "openRecordData":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-          "ownerOpenRecordData":0,
-          "familyOpenRecordData":0,
-          "visitorOpenRecordData":0
+          "ownerOpenRecord": 0,
+          "ownerOpenRecordData": [],
+          "familyOpenRecord": 0,
+          "familyOpenRecordData": [],
+          "tenantOpenRecord": 0,
+          "tenantOpenRecordData": [],
+          "visitorOpenRecord": 0,
+          "visitorOpenRecordData": [],
         },
         loadRepairTotal:{
-          commonDeal: 2,
-          commonTotal: 3,
-          homeDeal: 2,
-          homeTotal: 4,
-          monthDealNumber: 3,
-          report: 0,
-          reportTotal: 0,
-          todayNewNumber: 7,
-          repairRecordList:[
+          monthDealBS: 1,
+          monthDealGGBX: 6,
+          monthDealJTBX: 68,
+          monthTotal: 99,
+          monthTotalBS: 1,
+          monthTotalGGBX: 7,
+          monthTotalJTBX: 91,
+          repairList:[
             {
-              recordTime: "04-16 13:02:00",
-              userName: "姚丽玲", 
-              repairType: "公共区域"
+              startName: "刘颖",
+              startTime: "07-13 10:01:27",
+              type: 1,
+              typeName: "家庭区域报修"
             }
           ]
         },
@@ -190,7 +195,10 @@
           equipDataXYList:[
             {nameX: "供配电系统", valueY: 37}
           ]
-        }
+        },
+
+        // 视频部分
+        accessToken:''
 
       }
     },
@@ -205,6 +213,8 @@
     },
 
     created() {
+      this.getVideoShowAPI();
+      // this.getToken();
       this.getHouseDataAPI();
       this.getDeptUserDataAPI();
       this.getSchedulingDataAPI();
@@ -213,7 +223,7 @@
       this.getComplaintsDataAPI();
       this.getPersonInOutDataAPI();
       this.getLoadRepairTotalAPI();
-      this.getLoadInsTotalAPI();
+      // this.getLoadInsTotalAPI();
       this.getLoadEquipTotalAPI();
     },
     mounted(){
@@ -228,6 +238,67 @@
       };
     },
     methods: {
+      _changeCommunity(){
+        this.getVideoShowAPI();
+        // this.getToken();
+        this.getHouseDataAPI();
+        this.getDeptUserDataAPI();
+        this.getSchedulingDataAPI();
+        this.getCarInOutDataAPI();
+        this.getSpreadDataAPI();
+        this.getComplaintsDataAPI();
+        this.getPersonInOutDataAPI();
+        this.getLoadRepairTotalAPI();
+        // this.getLoadInsTotalAPI();
+        this.getLoadEquipTotalAPI();
+      },
+      // getToken(){
+      //   var that =this;
+      //   $.ajax({
+      //       type: "post",
+      //       url: "https://open.ys7.com/api/lapp/token/get",
+      //       data: {appKey: 'b9bec1fbaee547ccbca1f5100f942f07', appSecret: 'b6ad64d929cd10f45dfe0471751722da'},
+      //       dataType: "json",
+      //       success: function (res) {
+      //           if(res.code ==='200'){
+      //             that.accessToken = res.data.accessToken;
+      //             that.getVideoList();
+      //           }
+
+      //       }
+      //   });
+      // },
+      // getVideoList() {
+      //   var that =this;
+      //   $.ajax({
+      //       type: "post",
+      //       url: "https://open.ys7.com/api/lapp/live/video/list",
+      //       data: {accessToken: that.accessToken, pageSize:50},
+      //       dataType: "json",
+      //       success: function (res) {
+      //         if(res.code ==='200'){
+      //           for (let index = 0; index < res.data.length; index++) {
+      //             const element = res.data[index];
+      //             if(element.flvAddress){
+      //               that.videoUrl=element.flvAddress;
+      //               return;
+      //             }
+      //           }
+      //         }
+      //       }
+      //   });
+      // },
+      
+      //展示视频接口请求
+      getVideoShowAPI(){
+        this.request(this.api.videoShowAPI, {
+          
+        }, 'get').then(res => {
+          if (res.code==200) {
+            this.videoUrl=res.data.hls;
+          }
+        })
+      },
       setScreenScalc(){
         // 默认1920*1080
         const screenObj=document.getElementById('index');
@@ -241,10 +312,8 @@
       //楼栋、房产、住户人员相关接口
       getHouseDataAPI(){
         this.request(this.api.HouseDataAPI, {}, 'get').then(res => {
-          if (res.status === 0) {
-            this.basicCardData=res.datas;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code==200) {
+            this.basicCardData=res.data;
           }
         })
 
@@ -254,21 +323,21 @@
         this.request(this.api.DeptUserDataAPI, {
           
         }, 'get').then(res => {
-          if (res.status === 0) {
-            this.departUserData=res.datas;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code==200) {
+            this.departUserData=res.data;
           }
         })
       },
       //排班出勤接口
       getSchedulingDataAPI(){
         this.request(this.api.SchedulingDataAPI, {}, 'get').then(res => {
-          if (res.status === 0) {
-            this.schedulingData=res.datas;
+          if (res.code === 200) {
+            this.schedulData=res.data.schedulData;
+            this.attendanceList=res.data.attendanceList;
           }else{
-            this.$message(res.msg);
-            this.schedulingData=[];
+            // this.$message(res.msg);
+            this.schedulData=[];
+            this.attendanceList=[];
             this.isNoScheduling=true;
           }
         })
@@ -276,50 +345,40 @@
       // 获取车辆进出数据的接口
       getCarInOutDataAPI(){
         this.request(this.api.CarInOutDataAPI, {}, 'get').then(res => {
-          if (res.status === 0) {
-            this.carInOutData=res.datas;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code === 200) {
+            this.carInOutData=res.data;
           }
         })
       },
       // 社区运营统计接口
       getSpreadDataAPI(){
         this.request(this.api.SpreadDataAPI, {}, 'get').then(res => {
-          if (res.status === 0) {
-            this.spreadData=res.datas;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code === 200) {
+            this.spreadData=res.data;
           }
         })
       },
       // 投诉表扬统计接口
       getComplaintsDataAPI(){
         this.request(this.api.ComplaintsDataAPI, {}, 'get').then(res => {
-          if (res.status === 0) {
-            this.complaintsData=res.datas;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code === 200) {
+            this.complaintsData=res.data;
           }
         })
       },
       // 人员进出统计接口
       getPersonInOutDataAPI(){
         this.request(this.api.PersonInOutDataAPI, {}, 'get').then(res => {
-          if (res.status === 0) {
-            this.personInOutData=res.datas;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code === 200) {
+            this.personInOutData=res.data;
           }
         })
       },
       // 报修统计接口
       getLoadRepairTotalAPI(){
         this.request(this.api.LoadRepairTotalAPI, {}, 'get').then(res => {
-          if (res.state) {
-            this.loadRepairTotal=res.scsRepairTotal;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code==200) {
+            this.loadRepairTotal=res.data;
           }
         })
       },
@@ -328,18 +387,14 @@
         this.request(this.api.LoadInsTotalAPI, {}, 'get').then(res => {
           if (res.state) {
             this.loadInsTotal=res.planTotal;
-          }else{
-            this.$message.error('数据丢失!');
           }
         })
       },
       // 设备统计接口
       getLoadEquipTotalAPI(){
         this.request(this.api.LoadEquipTotalAPI, {}, 'get').then(res => {
-          if (res.state) {
-            this.loadEquipTotal=res.ppmEquipTotal;
-          }else{
-            this.$message.error('数据丢失!');
+          if (res.code==200) {
+            this.loadEquipTotal=res.data;
           }
         })
       },

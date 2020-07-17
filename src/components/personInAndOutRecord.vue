@@ -20,8 +20,7 @@
           <div id="person-pie-echart-4"></div>
         </div>
       </div>
-      <div class="img-box">
-         <!-- swiper -->
+      <!-- <div class="img-box">
           <swiper :options="swiperOption"  ref="personInAndOutSwiper">
             <swiper-slide>
               <div class="item-box">
@@ -66,7 +65,7 @@
               <i class="iconfont el-icon-right"></i>
             </div>
           </swiper>
-      </div>
+      </div> -->
     </divShell>
   </section>
 </template>
@@ -115,6 +114,7 @@ export default {
       pieChartObj2:null,
       pieChartObj3:null,
       pieChartObj4:null,
+      // allCount:0
     }
   },
   created(){
@@ -126,11 +126,13 @@ export default {
   },
   watch:{
     personInOutData(){
+      let all = this.personInOutData.ownerOpenRecord+this.personInOutData.familyOpenRecord+this.personInOutData.tenantOpenRecord+this.personInOutData.visitorOpenRecord;
       this.renderLineEcharts('(人)');
-      this.renderPieEcharts(this.pieChartObj1,'业主',this.personInOutData.ownerOpenRecordData);
-      this.renderPieEcharts(this.pieChartObj2,'家属',this.personInOutData.familyOpenRecordData);
-      this.renderPieEcharts(this.pieChartObj3,'租户',0);
-      this.renderPieEcharts(this.pieChartObj4,'访客',this.personInOutData.visitorOpenRecordData);
+      this.renderPieEcharts(this.pieChartObj1,'业主',this.personInOutData.ownerOpenRecord,all-this.personInOutData.ownerOpenRecord,'#89FFE7');
+      this.renderPieEcharts(this.pieChartObj2,'家属',this.personInOutData.familyOpenRecord,all-this.personInOutData.familyOpenRecord,'#FF9C9E');
+      this.renderPieEcharts(this.pieChartObj3,'租户',this.personInOutData.tenantOpenRecord,all-this.personInOutData.tenantOpenRecord,'#FF6060');
+      this.renderPieEcharts(this.pieChartObj4,'访客',this.personInOutData.visitorOpenRecord,all-this.personInOutData.visitorOpenRecord,'#FACD89');
+      // this.allCount=this.personInOutData.ownerOpenRecordData+this.personInOutData.familyOpenRecordData+this.personInOutData.visitorOpenRecordData+0;
     }
   },
   mounted() {
@@ -156,13 +158,13 @@ export default {
               bottom: '25',
               top:'40'
           },
-          color:['#89FFE7','#FF9C9E'],
+          color:['#89FFE7','#FF9C9E','#FF6060','#FACD89'],
           tooltip: {
               trigger: 'axis',
           },
           xAxis: {
               type: 'category',
-              data: ['1', '2', '3', '4', '5', '6', '7', '8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
+              data: ['1', '2', '3', '4', '5', '6', '7', '8','9','10','11','12','13','14','15'],
               name:'(时)',
               nameTextStyle:{
                 color:'#4D5470',
@@ -184,6 +186,7 @@ export default {
           yAxis: {
               type: 'value',
               name:unit,
+              // minInterval:1,
               nameTextStyle:{
                 color:'#4D5470',
               },
@@ -205,12 +208,13 @@ export default {
               }
           },
           series: [
+            
             {
-              name: '进出次数',
+              name: '业主',
               type: 'line',
               symbol: 'none',
               smooth:true,
-              data: this.personInOutData.openRecordData,
+              data: this.personInOutData.ownerOpenRecordData,
               lineStyle:{
                 width:4,
                 color:'#89FFE7'
@@ -225,39 +229,89 @@ export default {
                   }])
               },
             },
-            // {
-            //   name: '出',
-            //   type: 'line',
-            //   symbol: 'none',
-            //   smooth:true,
-            //   data: [380,390,420,480,560,590,620,660,630,600,520,380,320,400, 420, 410, 350, 340, 320, 280,250,290,300,350],
-            //   lineStyle:{
-            //     width:4,
-            //     color:'#FF9C9E'
-            //   },
-            //   areaStyle: {
-            //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            //           offset: 0,
-            //           color: 'rgba(255,156,158,0.5)'
-            //       }, {
-            //           offset: 1,
-            //           color: 'rgba(255,255,255,0.05)'
-            //       }])
-            //   },
-            // },
+            {
+              name: '家属',
+              type: 'line',
+              symbol: 'none',
+              smooth:true,
+              data: this.personInOutData.familyOpenRecordData,
+              lineStyle:{
+                width:4,
+                color:'#FF9C9E'
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                      offset: 0,
+                      color: 'rgba(255,156,158,0.5)'
+                  }, {
+                      offset: 1,
+                      color: 'rgba(255,255,255,0.05)'
+                  }])
+              },
+            },
+            {
+              name: '租户',
+              type: 'line',
+              symbol: 'none',
+              smooth:true,
+              data: this.personInOutData.tenantOpenRecordData,
+              lineStyle:{
+                width:4,
+                color:'#FF6060'
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                      offset: 0,
+                      color: 'rgba(255,96,96,0.5)'
+                  }, {
+                      offset: 1,
+                      color: 'rgba(255,255,255,0.05)'
+                  }])
+              },
+            },
+            {
+              name: '游客',
+              type: 'line',
+              symbol: 'none',
+              smooth:true,
+              data: this.personInOutData.visitorOpenRecordData,
+              lineStyle:{
+                width:4,
+                color:'#FACD89'
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                      offset: 0,
+                      color: 'rgba(250,205,137,0.5)'
+                  }, {
+                      offset: 1,
+                      color: 'rgba(255,255,255,0.05)'
+                  }])
+              },
+            },
           ]
         }
       this.lineChartObj.setOption(option,true);
     },
-    renderPieEcharts(obj,unit,count){
+    renderPieEcharts(obj,unit,count=0,all=0,color='#252B4A'){
       var option = {
         tooltip: {
           trigger: 'item',
+          // show:false
+          formatter:function(x){
+            if(x.dataIndex==0){
+              return x.seriesName+'<br>'+x.marker+x.name+':'+x.value
+            }else{
+              return ''
+            }
+          }
         },
         graphic:{
           type:'text',
           left:'center',
-          top:'42px',
+          // top:'42px',
+          // top:'67px',
+          top:'40px',
           z:2,
           zlevel:100,
           style:{
@@ -265,7 +319,8 @@ export default {
             width:100,
             height:30,
             fontSize:14,
-            text:unit,
+            // text:unit+'\n\n '+count+'次',
+            text:unit
           }
         },
         series: [
@@ -296,18 +351,19 @@ export default {
             data: [
               {
                 value: count, 
-                name: '进出次数',
+                name: unit,
                 itemStyle:{
-                  color:'#89FFE7'
+                  color:color
                 },
               },
-              // {
-              //   value: 0, 
-              //   name: '进出次数',
-              //   itemStyle:{
-              //     color:'#FF9C9E'
-              //   },
-              // },
+              {
+                value:all, 
+                name: '其它',
+                hoverAnimation:false,
+                itemStyle:{
+                  color:'#131a32'
+                },
+              },
             ]
           }
         ]
@@ -328,7 +384,7 @@ export default {
     position: relative;
     & .echart-box{
       width: 100%;
-      height: 290px;
+      // height: 290px;
       &>.label{
         position: absolute;
         width: 80px;
@@ -351,11 +407,14 @@ export default {
         }
       }
       &> .person-line-echart{
-        height: 188px;
+        // height: 188px;
+        height: 260px;
       }
       &> .classes-static{
-        height: 100px;
+        // height: 100px;
+        height: 96px;
         display: flex;
+        margin-top: 22px;
         &>div{
           width: 25%;
         }
@@ -364,7 +423,7 @@ export default {
     & .img-box{
       display: block;
       width: 514px;
-      height: 100px;
+      // height: 100px;
       overflow: hidden;
       margin-top: 10px;
       & .swiper-container{

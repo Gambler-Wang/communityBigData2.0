@@ -1,9 +1,9 @@
 <template>
   <section id="schedlingCard">
     <!-- swiper -->
-    <swiper :options="swiperOption"  ref="schedlingSwiper" v-if="!isNoScheduling && schedulingData.length>0">
+    <swiper :options="swiperOption"  ref="schedlingSwiper" v-if="!isNoScheduling && schedulData.length>0">
       <template>
-        <swiper-slide v-for="(item,index) in schedulingData" :key="index">
+        <swiper-slide v-for="(item,index) in schedulData" :key="index">
           <div class="card">
             <h5>
               <i class="iconfont el-icon-scheduling"></i>
@@ -18,6 +18,25 @@
               缺勤：
               <b>
                 {{item.shiftNum-item.attendance}} 
+              </b>
+            </p>
+          </div>
+        </swiper-slide>
+        <swiper-slide v-for="(item,index) in attendanceList" :key="index">
+          <div class="card">
+            <h5>
+              <i class="iconfont el-icon-scheduling"></i>
+              {{item.attendanceName}}
+            </h5>
+            <p>
+              <span>
+                {{item.attendanceNum}} 
+              </span>人
+            </p>
+            <p>
+              {{item.attendanceName+':'}}
+              <b>
+                 {{item.attendanceNum}} 
               </b>
             </p>
           </div>
@@ -119,7 +138,7 @@
         </div>
       </swiper-slide> -->
     </swiper>
-    <swiper :options="swiperOption"  ref="schedlingSwiper" v-if="isNoScheduling && schedulingData.length == 0">
+    <swiper :options="swiperOption"  ref="schedlingSwiper" v-if="isNoScheduling && schedulData.length == 0 && attendanceList.length == 0">
       <template>
         <swiper-slide >
           <div class="card">
@@ -228,7 +247,7 @@ export default {
   components:{
     AnimatedNumber,
   },
-  props:['schedulingData','isNoScheduling'],
+  props:['schedulData','attendanceList','isNoScheduling'],
   data() {
     return {
       swiperOption: { 

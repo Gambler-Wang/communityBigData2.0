@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>EZOPEN播放协议</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "微软雅黑";
+            background: #eee;
+        }
+
+        button {
+            display: inline-block;
+            padding: 6px 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            border-color: #28a4c9;
+            color: #fff;
+            background-color: #5bc0de;
+            margin: 20px 20px 0 0;
+        }
+
+        .box {
+            /*width: 800px;*/
+            margin: 100px auto 0;
+            /*height: 34px;*/
+            padding: 4px 8px;
+            margin: 0;
+            box-sizing: border-box;
+            margin-bottom: 4%;
+            background: rgba(255, 255, 255, 1);
+            /*border-radius: 20px;*/
+            display: flex;
+        }
+
+        .page {
+            width: 600px;
+        }
+
+        .info {
+            width: 200px;
+            height: 34px;
+            line-height: 34px;
+        }
+
+        .fl {
+            float: left;
+        }
+    </style>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .hint {
+            font-size: 14px;
+            line-height: 3em;
+            color: gray;
+        }
+
+        #url,
+        #url2,
+        #accessToken {
+            width: 100%;
+        }
+
+        .btn-container {
+            margin: 10px;
+        }
+
+        .normal {
+            color: green;
+            margin: 5px;
+        }
+
+        .error {
+            color: red;
+            margin: 5px;
+        }
+        #playWind {
+            background-color: #000000;
+        }
+    </style>
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .main {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            background-color: #f5f7f9;
+            box-sizing: border-box;
+            padding: 20px;
+            padding-left: 0;
+            justify-content: space-between;
+        }
+
+        .video-box {
+            background: rgba(255, 255, 255, 1);
+            border-radius: 20px;
+            padding: 25px;
+            /*box-sizing: border-box;*/
+            width: 1200px;
+            height: 100%;
+        }
+
+        .video-box .title {
+            font-size: 18px;
+            font-family: Microsoft YaHei;
+            font-weight: bold;
+            color: rgba(1, 23, 20, 1);
+            line-height: 20px;
+            padding-bottom: 20px;
+        }
+
+        #video {
+            width: 100%;
+            height: 80%;
+            background-color: rgba(0, 0, 0, 1);
+            box-sizing: border-box;
+            /*padding-top: 20px;*/
+        }
+
+        .video-box .opera {
+            height: 38px;
+            background-color: #121212;
+            padding: 9px 11px;
+        }
+
+        .video-box .opera img {
+            width: 18px;
+            height: 18px;
+        }
+
+        .video-box .opera .gray {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: rgba(181, 181, 181, 1);
+            border: 1px solid rgba(115, 115, 115, 1);
+            margin-right: 12px;
+        }
+
+        .footer {
+            height: 10%;
+            box-sizing: border-box;
+            padding-top: 18px;
+        }
+
+        .footer span {
+            display: inline-block;
+            padding: 15px 15px;
+            border: 1px solid rgba(152, 152, 152, 1);
+            border-radius: 8px;
+            background-color: #232323;
+            text-align: center;
+            box-sizing: border-box;
+            margin-right: 20px;
+        }
+
+        .footer span img {
+            width: 31px;
+            height: 31px;
+        }
+
+        .left {
+            width: 380px;
+            height: 100%;
+        }
+
+        .left ul {
+            height: 51%;
+            width: 100%;
+            overflow: auto;
+            padding: 28px 38px;
+            margin: 0;
+            box-sizing: border-box;
+            margin-bottom: 4%;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 20px;
+        }
+        .left .control {
+            height: 40%;
+            width: 100%;
+            padding: 30px 43px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .left .control .title {
+            font-size: 18px;
+            font-family: Microsoft YaHei;
+            font-weight: bold;
+            color: rgba(1, 23, 20, 1);
+            line-height: 18px;
+            padding-bottom: 20px;
+        }
+
+        .left .control .btn-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .left .control .btn-box span {
+            display: inline-block;
+            padding: 15px 15px;
+            width: 33%;
+            box-sizing: border-box;
+            /*border:1px solid rgba(152,152,152,1);*/
+            border-radius: 8px;
+            background: url("./images/default.png") no-repeat center/cover;
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 6px;
+            /*margin-right: 20px;*/
+        }
+
+        .left .control .btn-box span.active {
+            background: url("./images/active.png") no-repeat center/cover;
+        }
+        #param {
+            list-style: none;
+        }
+
+        #param li {
+            height: 33px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        #param li.active {
+            color: #016557;
+        }
+        #param li.active::after {
+            content: '√';
+            display: inline-block;
+        }
+    </style>
+    <link rel="stylesheet" href="../page.css" />
+</head>
+<script>
+</script>
+
+<body>
+<script src="../ezuikit.js"></script>
+<!--<script src="../js/jsPlugin-1.2.0.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/bluebird/latest/bluebird.min.js"></script>-->
+<!--<div class="hint">demo页面仅为代码示例无法直接运行，需要部署到服务器上才可以播放。另外监控模式与多窗口模式对浏览器版本有要求：Chrome: 55+ Firefox: V55+。</div>-->
+<script src="../js/jquery.min.js"></script>
+<!--<h2>预览，回放 多窗口模式示例：</h2>-->
+<!-- <p>ezopen地址用逗号分隔</p> -->
+<!--<textarea id="url" placeholder="这里输入ezopen地址"></textarea>-->
+<!--<textarea id="accessToken" placeholder="这里输入accessToken"></textarea>-->
+<script src="../js/page.js"></script>
+<div class="main" id="app">
+    <div class="right video-box">
+        <div class="title">实时监控</div>
+        <div id="video">
+        </div>
+        <div class="opera"><span class="gray"></span>
+            <!--<img src="./images/photo.png" alt=""> -->
+            <img style="float: right;" onclick="clickFullScreen();" src="./images/allScreen.png" alt=""></div>
+        <div class="footer">
+            <span id="init" class="play"><img src="./images/play.png" alt=""></span>
+            <span id="stop" class="stop"><img src="./images/stop.png" alt=""></span>
+            <span  onclick="changeWndNum(1);"><img src="./images/oneScreen.png" alt=""></span>
+            <span  onclick="changeWndNum(2);"><img src="./images/fourSrceen.png" alt=""></span>
+            <!--<span><img src="./images/photo.png" alt=""></span>-->
+            <!--<span><img src="./images/video.png" alt=""></span>-->
+            <!--<span onclick="clickFullScreen();"><img src="./images/allScreen.png" alt=""></span>-->
+        </div>
+    </div>
+    <div class="left">
+        <ul id="param">
+            <!--<li>宁夏中宁枸杞园</li>-->
+
+        </ul>
+        <div class="box">
+            <div id="pagination1" class="page fl"></div>
+        </div>
+        <div class="control">
+            <div class="title">云控制</div>
+            <div class="btn-box">
+                <span onmousedown="direction(this,4)" onmouseup="stop(4)"><img src="./images/leftUp.png" alt=""></span>
+                <span onmousedown="direction(this,0)" onmouseup="stop(0)"><img src="./images/up.png" alt=""></span>
+                <span onmousedown="direction(this,6)" onmouseup="stop(6)"><img src="./images/rightUp.png" alt=""></span>
+                <span onmousedown="direction(this,2)" onmouseup="stop(2)"><img src="./images/left.png" alt=""></span>
+                <span onmousedown="direction(this,10)" onmouseup="stop(10)"><img src="./images/AUTO.png" alt=""></span>
+                <span onmousedown="direction(this,3)" onmouseup="stop(3)"><img src="./images/right.png" alt=""></span>
+                <span onmousedown="direction(this,5)" onmouseup="stop(5)"><img src="./images/leftDown.png" alt=""></span>
+                <span onmousedown="direction(this,1)" onmouseup="stop(1)"><img src="./images/down.png" alt=""></span>
+                <span onmousedown="direction(this,7)" onmouseup="stop(7)"><img src="./images/rightDown.png" alt=""></span>
+            </div>
+            <p style="color: #C20000;">*也可使用键盘qweasdzxc操作摄像头 进行转向</p>
+        </div>
+    </div>
+</div>
+
+<!--<div id="playWind" style="width: 1200px; height: 800px;"></div>-->
+<!--<div class="btnBox">-->
+    <!--<button onmousedown="direction(0)" onmouseup="stop(0)">上</button>-->
+    <!--<button onmousedown="direction(1)" onmouseup="stop(1)">下</button>-->
+    <!--<button onmousedown="direction(2)" onmouseup="stop(2)">左</button>-->
+    <!--<button onmousedown="direction(3)" onmouseup="stop(3)">右</button>-->
+    <!--<button onmousedown="direction(4)" onmouseup="stop(4)">左上</button>-->
+    <!--<button onmousedown="direction(5)" onmouseup="stop(5)">左下</button>-->
+    <!--<button onmousedown="direction(6)" onmouseup="stop(6)">右上</button>-->
+    <!--<button onmousedown="direction(7)" onmouseup="stop(7)">右下</button>-->
+    <!--<button onmousedown="direction(8)" onmouseup="stop(8)">放大</button>-->
+    <!--<button onmousedown="direction(9)" onmouseup="stop(9)">缩小</button>-->
+    <!--<button onmousedown="direction(10)" onmouseup="stop(10)">近焦距</button>-->
+    <!--<button onmousedown="direction(11)" onmouseup="stop(11)">远焦距</button>-->
+<!--</div>-->
+<div class="btn-container">
+    <!--<button id="init">开始初始化</button>-->
+    <!--<button id="start">初始化播放</button>-->
+    <!--<button id="stop">全部结束</button>-->
+</div>
+<script>
+    var decoder,
+        accessToken = 'at.9v09xlgs3i2b09rvdwfvjuvsbrthfgp1-3npo2t61df-0d0k2x0-9z8xriwbh',
+        // accessToken = 'at.cpcemfx56ix3gbmn6m8dpyl779lrt5gl-8hej4lr38r-0lcasj9-cj6sbjoo6',
+        WndNum=1,
+        pageStart=0,
+        totalPage=0,
+        url=[];
+    $("#init").show();
+    $("#stop").hide();
+
+    //获取token
+    getToken();
+    function getToken(){
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/token/get",
+            data: {appKey: 'b9bec1fbaee547ccbca1f5100f942f07', appSecret: 'b6ad64d929cd10f45dfe0471751722da'},
+            dataType: "json",
+            success: function (res) {
+                if(res.code ==='200'){
+                    accessToken = res.data.accessToken;
+                    //获取设备列表
+                    getList()
+                    //获取总页数
+                    getTotalPage();
+                }
+
+            }
+        });
+    }
+    //初始化
+    $("#init").click(function () {
+        // var url = $('#url').val().trim();
+        // var accessToken = $('#accessToken').val().trim();
+        if(url.length<=0){
+            alert('请选择右边设备')
+            return;
+        }
+
+        decoder = new EZUIKit.EZUIPlayer({
+            id: 'video',
+            autoplay: true,
+            url: url.toString(),
+            // url:'ezopen://open.ys7.com/C16525602/1.hd.live',
+            accessToken: accessToken,
+            decoderPath: '../',
+            width: 1140,
+            height: 580,
+            splitBasis: WndNum, // 1*1 2*2 3*3 4*4
+            handleError:function () {
+                // $(this).hide();
+                // $("#stop").show();
+            },
+            handleSuccess: function () {
+               console.log('1')
+            },
+        });
+        $(this).hide();
+        $("#stop").show();
+        //开始预览
+        $("#start").click(function () {
+            decoder.play({
+                // index:[0,1],
+                // handleError: handleError,
+                // handleSuccess: handleSuccess,
+            });
+        });
+        //停止预览
+        $("#stop").click(function () {
+            $(this).hide();
+            $("#init").show();
+            decoder.stop(0);
+            decoder.stop(1);
+            decoder.stop(2);
+            decoder.stop(3);
+        })
+
+    });
+
+    //云台控制
+    function direction(e,num) {
+        $(e).attr('class', 'active');
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/device/ptz/start",
+            data: {
+                accessToken: accessToken,
+                deviceSerial: 'C16525602',
+                channelNo: 1,
+                direction: num,
+                speed: 1
+            },
+            dataType: "json",
+            success: function (data) {
+
+            }
+        });
+    }
+    //云台停止
+    function stop(num) {
+        $('.btn-box span').attr('class', '');
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/device/ptz/stop",
+            data: {
+                accessToken: accessToken,
+                deviceSerial: 'C16525602',
+                channelNo: 1,
+                direction: num,
+                speed: 1
+            },
+            dataType: "json",
+            success: function (data) {
+
+            }
+        });
+    }
+    //键盘方向控制事件
+    $(document).keydown(function (event) {
+        switch (event.keyCode) {
+            case 81:
+                direction(this, 5);
+                console.log(event.keyCode)
+                break;
+            case 87:
+                direction(this, 1);
+                break;
+            case 69:
+                direction(this, 7);
+                break;
+            case 65:
+                direction(this, 3);
+                break;
+            case 83:
+                direction(this, 9);
+                break;
+            case 68:
+                direction(this, 4);
+                break;
+            case 90:
+                direction(this, 6);
+                break;
+            case 88:
+                direction(this, 2);
+                break;
+            case 67:
+                direction(this, 8);
+                break;
+        }
+    });
+    $(document).keyup(function (event) {
+        switch (event.keyCode) {
+            case 81:
+                stop(5);
+                console.log(event.keyCode)
+                break;
+            case 87:
+                stop(1);
+                break;
+            case 69:
+                stop(7);
+                break;
+            case 65:
+                stop(3);
+                break;
+            case 83:
+                stop(9);
+                break;
+            case 68:
+                stop(4);
+                break;
+            case 90:
+                stop(6);
+                break;
+            case 88:
+                stop(2);
+                break;
+            case 67:
+                stop(8);
+                break;
+        }
+    });
+    //分屏
+    function changeWndNum(num){
+        WndNum = num;
+        $("#stop").trigger('click')
+        $("#init").trigger("click")
+    }
+
+    function clickFullScreen(){
+        $("#video").trigger('dbclick')
+    }
+    //获取设备列表
+    // getList()
+    function getList() {
+        $.ajax({
+            type: "post",
+            // url: "https://open.ys7.com/api/lapp/camera/list",
+            url: "https://open.ys7.com/api/lapp/camera/list",
+            data: {accessToken: accessToken, pageStart: pageStart, pageSize: 10},
+            dataType: "json",
+            success: function (res) {
+                $("#param").empty();
+                res.data.forEach(function (item,index) {
+                    $("#param").append('<li name="ezopen://open.ys7.com/'+item.deviceSerial+'/'+item.channelNo+'.hd.live" onclick="chooseItem(' + index + ',this)">' + item.channelName + '</li>')
+                });
+            }
+        });
+    }
+    //获取总页数
+    // getTotalPage();
+    function getTotalPage() {
+        $.ajax({
+            type: "post",
+            url: "https://open.ys7.com/api/lapp/camera/list",
+            data: {accessToken: accessToken, pageStart: pageStart, pageSize: 10},
+            dataType: "json",
+            success: function (res) {
+                totalPage = Math.ceil(res.page.total/res.page.size);
+                pageInit()
+            }
+        });
+    }
+    function pageInit(){
+        $("#pagination1").pagination({
+            currentPage: 1,
+            totalPage: totalPage,
+            callback: function(current) {
+                $("#current1").text(current);
+                pageStart=current-1;
+                getList()
+                // console.log(current)
+            }
+        });
+    };
+    // 设备选择
+    $("#stop").trigger('click')
+    function chooseItem(index, e) {
+        $(e).toggleClass('active');
+        url = [];
+        $('#param li.active').each(function (index,item) {
+            url.push($(item).attr("name"));
+
+        });
+        if(url.length>1){
+            WndNum = 2;
+            $("#stop").trigger('click')
+            setTimeout(function () {
+                $("#init").trigger("click")
+            },50)
+        }
+        if (url.length===1){
+            WndNum = 1;
+            // $("#stop").trigger('click')
+            $("#init").trigger("click")
+        }
+        if(url.length===0){
+            $("#stop").trigger('click')
+        }
+
+        // $(e).siblings().removeClass('active');
+    }
+</script>
+</body>
+
+</html>

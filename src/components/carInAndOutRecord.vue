@@ -1,16 +1,16 @@
 <template>
   <section id="carInAndOutRecord">
-    <divShell viewTitle="车辆进出记录">
+    <divShell viewTitle="APP注册用户">
       <div class="echart-box">
         <div class="label">
-          <div>
+          <!-- <div>
             <i style="background:#89FFE7;"></i>
             进
           </div>
           <div>
             <i style="background:#FF9C9E;"></i>
             出
-          </div>
+          </div> -->
         </div>
         <div class="car-line-echart" id="car-line-echart"></div>
         <div class="classes-static">
@@ -20,8 +20,7 @@
           <div id="car-pie-echart-4"></div>
         </div>
       </div>
-      <div class="img-box">
-         <!-- swiper -->
+      <!-- <div class="img-box">
           <swiper :options="swiperOption"  ref="carInAndOutSwiper">
             <swiper-slide>
               <div class="item-box">
@@ -66,7 +65,7 @@
               <i class="iconfont el-icon-right"></i>
             </div>
           </swiper>
-      </div>
+      </div> -->
     </divShell>
   </section>
 </template>
@@ -122,11 +121,12 @@ export default {
   },
   watch:{
     carInOutData(){
+      let all = this.carInOutData.owner+this.carInOutData.family+this.carInOutData.tenant+this.carInOutData.visitor
       this.renderLineEcharts('(人)');
-      this.renderPieEcharts(this.pieChartObj1,'固定车',0,0);
-      this.renderPieEcharts(this.pieChartObj2,'月租车',this.carInOutData.moonCarInData,this.carInOutData.moonCarOutData);
-      this.renderPieEcharts(this.pieChartObj3,'临时车',this.carInOutData.tempCarInData,this.carInOutData.tempCarrOutData);
-      this.renderPieEcharts(this.pieChartObj4,'其它',this.carInOutData.otherCarInData,this.carInOutData.otherCarOutData);
+      this.renderPieEcharts(this.pieChartObj1,'业主',this.carInOutData.owner,all-this.carInOutData.owner,'#89FFE7');
+      this.renderPieEcharts(this.pieChartObj2,'家属',this.carInOutData.family,all-this.carInOutData.family,'#FF9C9E');
+      this.renderPieEcharts(this.pieChartObj3,'租户',this.carInOutData.tenant,all-this.carInOutData.tenant,'#FF6060');
+      this.renderPieEcharts(this.pieChartObj4,'游客',this.carInOutData.visitor,all-this.carInOutData.visitor,'#FACD89');
     }
   },
   mounted() {
@@ -152,14 +152,14 @@ export default {
               bottom: '25',
               top:'40'
           },
-          color:['#89FFE7','#FF9C9E'],
+          color:['#89FFE7','#FF9C9E','#FF6060','#FACD89'],
           tooltip: {
               trigger: 'axis',
           },
           xAxis: {
               type: 'category',
-              data: ['1', '2', '3', '4', '5', '6', '7', '8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-              name:'(时)',
+              data: ['1', '2', '3', '4', '5', '6', '7', '8','9','10','11','12','13','14','15'],
+              name:'(天)',
               nameTextStyle:{
                 color:'#4D5470',
               },
@@ -202,11 +202,11 @@ export default {
           },
           series: [
             {
-              name: '进',
+              name: '业主',
               type: 'line',
               symbol: 'none',
               smooth:true,
-              data: this.carInOutData.carInData,
+              data: this.carInOutData.ownerData,
               lineStyle:{
                 width:4,
                 color:'#89FFE7'
@@ -222,11 +222,11 @@ export default {
               },
             },
             {
-              name: '出',
+              name: '家属',
               type: 'line',
               symbol: 'none',
               smooth:true,
-              data: this.carInOutData.carOutData,
+              data: this.carInOutData.familyData,
               lineStyle:{
                 width:4,
                 color:'#FF9C9E'
@@ -241,11 +241,52 @@ export default {
                   }])
               },
             },
+            {
+              name: '租户',
+              type: 'line',
+              symbol: 'none',
+              smooth:true,
+              data: this.carInOutData.tenantData,
+              lineStyle:{
+                width:4,
+                color:'#FF6060'
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                      offset: 0,
+                      color: 'rgba(255,96,96,0.5)'
+                  }, {
+                      offset: 1,
+                      color: 'rgba(255,255,255,0.05)'
+                  }])
+              },
+            },
+            {
+              name: '游客',
+              type: 'line',
+              symbol: 'none',
+              smooth:true,
+              data: this.carInOutData.visitorData,
+              lineStyle:{
+                width:4,
+                color:'#FACD89'
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                      offset: 0,
+                      color: 'rgba(250,205,137,0.5)'
+                  }, {
+                      offset: 1,
+                      color: 'rgba(255,255,255,0.05)'
+                  }])
+              },
+            },
+            // 租户 游客
           ]
         }
       this.lineChartObj.setOption(option,true);
     },
-    renderPieEcharts(obj,unit,carIn,carOut){
+    renderPieEcharts(obj,unit,count=0,all=0,color='#252B4A'){
       var option = {
         tooltip: {
           trigger: 'item',
@@ -253,7 +294,9 @@ export default {
         graphic:{
           type:'text',
           left:'center',
-          top:'42px',
+          // top:'42px',
+          // top:'67px',
+          top:'40px',
           z:2,
           zlevel:100,
           style:{
@@ -291,17 +334,18 @@ export default {
             },
             data: [
               {
-                value: carIn, 
-                name: '进',
+                value: count, 
+                name: unit,
                 itemStyle:{
-                  color:'#89FFE7'
+                  color:color
                 },
               },
               {
-                value: carOut, 
-                name: '出',
+                value: all, 
+                name: '其它',
+                hoverAnimation:false,
                 itemStyle:{
-                  color:'#FF9C9E'
+                  color:'#131a32'
                 },
               },
             ]
@@ -324,7 +368,7 @@ export default {
     position: relative;
     & .echart-box{
       width: 100%;
-      height: 290px;
+      // height: 290px;
       &>.label{
         position: absolute;
         width: 80px;
@@ -347,11 +391,14 @@ export default {
         }
       }
       &> .car-line-echart{
-        height: 188px;
+        // height: 188px;
+        height: 260px;
       }
       &> .classes-static{
-        height: 100px;
+        // height: 100px;
+        height: 96px;
         display: flex;
+        margin-top: 22px;
         &>div{
           width: 25%;
         }
@@ -360,7 +407,7 @@ export default {
     & .img-box{
       display: block;
       width: 514px;
-      height: 100px;
+      // height: 100px;
       overflow: hidden;
       margin-top: 10px;
       & .swiper-container{

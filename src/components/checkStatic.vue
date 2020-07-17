@@ -259,7 +259,7 @@ export default {
     }
     & .list{
       height: 80px;
-      width: 85%;
+      width: 100%;
       overflow: hidden;
       & li{
         height: 28px;

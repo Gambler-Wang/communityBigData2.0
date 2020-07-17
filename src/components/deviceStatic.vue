@@ -82,11 +82,19 @@ export default {
   },
   methods: {
     changeData(){
-      if(this.loadEquipTotal.equipDataXYList.length>0){
-        this.loadEquipTotal.equipDataXYList.forEach(el => {
-          this.x.push(el.nameX.replace('_',''));
-          this.y.push(el.valueY);
+      if(this.loadEquipTotal.equipType.length>0){
+        this.loadEquipTotal.equipType.forEach(el => {
+          this.x.push(el);
         });
+      }else{
+        this.x=[];
+      }
+      if(this.loadEquipTotal.equipData.length>0){
+        this.loadEquipTotal.equipData.forEach(el => {
+          this.y.push(el);
+        });
+      }else{
+        this.y=[];
       }
     },
     renderBarEcharts(){

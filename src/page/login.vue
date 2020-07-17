@@ -119,10 +119,10 @@
             });
             this.$go('/index')
           }else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            });
+            // this.$message({
+            //   message: res.msg,
+            //   type: 'error'
+            // });
           }
         })
       },

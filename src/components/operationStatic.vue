@@ -11,7 +11,7 @@
         <div>
           <scroll :data="noticeList" :class-option="optionSingleHeight">
             <p class="notice-p" v-for="(item,index) in noticeList" :key="index">
-              {{item.insidenotice_title}}
+              {{item.newsTitle}}
             </p>
           </scroll>
         </div>
@@ -109,15 +109,21 @@ export default {
               {
                   name:'运营统计',
                   type:'pie',
-                  radius: ['65%', '85%'],
+                  
+                  radius: ['58%', '78%'],
                   center: ['50%', '50%'],
-                  color:['#89FFE7','#549AF2','#FF9C9E'],
+                  color:['#89FFE7','#549AF2','#FF9C9E','#F24C84'],
                   label: {
                       position:'outside',
+                       alignTo:'edge',
                       normal:{
                          formatter: '{b}\n{d}%',
                          fontSize:12
                       }
+                  },
+                  labelLine:{
+                    length:10,
+                    length2:20
                   },
                   data:[
                       {
@@ -132,6 +138,10 @@ export default {
                         value:this.spreadData.bbsPostData, 
                         name:'帖子',
                       },
+                      // {
+                      //   value:this.spreadData.bbsBusinessData, 
+                      //   name:'二手交易',
+                      // },
                   ],
                   itemStyle: {
                       emphasis: {

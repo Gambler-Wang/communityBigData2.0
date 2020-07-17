@@ -16,7 +16,7 @@
         webkit-playsinline
         :src="videoUrl"
       ></video>
-      <video v-else src="../assets/test.mp4" autoplay="autoplay" muted="true"  loop ></video>
+      <video id="myPlayer" v-else src="../assets/test.mp4" autoplay="autoplay" muted="true"  loop ></video>
     </div>
   </section>
 </template>

@@ -7,8 +7,8 @@
 // const root = '/lx'
 const root = '';
 export const IS_MOCK = false
-export const API_BASE_URL = IS_MOCK ? '/mock/' : (process.env.NODE_ENV === 'development' ? 'https://www.xhuachina.com:8443/smartcommunity' + root : 'https://www.xhuachina.com:8443/smartcommunity')
+export const API_BASE_URL = IS_MOCK ? '/mock/' : (process.env.NODE_ENV === 'development' ? 'http://www.xhuachina.com/zhsqht' + root : 'http://www.xhuachina.com/zhsqht')
 export const TOKEN_KEY = 'X-Token'
 export const HISTORY_KEY = 'History-Key'
 // 菜单和权限所属模块
-export const CURRENT_MODEL = 6
+// export const CURRENT_MODEL = 6

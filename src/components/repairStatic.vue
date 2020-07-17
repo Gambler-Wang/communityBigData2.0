@@ -5,11 +5,11 @@
         <div>
           <div>
             <p>本月累计</p>
-            <p>处理任务</p>
+            <p>上报任务</p>
           </div>
           <p>
             <animated-number 
-              :value="loadRepairTotal.monthDealNumber" 
+              :value="loadRepairTotal.monthTotal" 
               :formatValue="formatToCount"
               :duration="1200"
             ></animated-number>  
@@ -22,7 +22,7 @@
           </div>
           <p>
             <animated-number 
-              :value="loadRepairTotal.todayNewNumber" 
+              :value="loadRepairTotal.todayTotal" 
               :formatValue="formatToCount"
               :duration="1200"
             ></animated-number>  
@@ -44,21 +44,21 @@
         <scroll v-if="listData.length>=3" :data="listData" :class-option="optionSingleHeight">
             <ul>
                 <li v-for="(item,index) in listData" :key="index">
-                  <span>{{item.recordTime}}</span>
-                  <span>{{item.userName}}</span>
-                  <span>{{item.repairType}}</span>
+                  <span>{{item.startTime}}</span>
+                  <span>{{item.startName}}</span>
+                  <span>{{item.typeName}}</span>
                 </li>
             </ul>
         </scroll>
         <ul v-if="listData.length<3">
-            <li v-for="(item,index) in listData" :key="index">
-              <span>{{item.recordTime}}</span>
-              <span>{{item.userName}}</span>
-              <span>{{item.repairType}}</span>
-            </li>
-            <li v-if="listData.length==0">
-              <span>今日暂无处理任务</span>
-            </li>
+          <li v-for="(item,index) in listData" :key="index">
+            <span>{{item.recordTime}}</span>
+            <span>{{item.userName}}</span>
+            <span>{{item.repairType}}</span>
+          </li>
+          <li v-if="listData.length==0">
+            <span>今日暂无处理任务</span>
+          </li>
         </ul>
       </div>
     </divShell>
@@ -122,21 +122,21 @@ export default {
       this.repairCountList=[
        {
          showname:'家庭区域',
-         currentValue:this.loadRepairTotal.homeDeal,
-         count:this.loadRepairTotal.homeTotal,
+         currentValue:this.loadRepairTotal.monthDealJTBX,
+         count:this.loadRepairTotal.monthTotalJTBX,
        },
        {
          showname:'公共区域',
-         currentValue:this.loadRepairTotal.commonDeal,
-         count:this.loadRepairTotal.commonTotal,
+         currentValue:this.loadRepairTotal.monthDealGGBX,
+         count:this.loadRepairTotal.monthTotalGGBX,
        },
        {
          showname:'报事',
-         currentValue:this.loadRepairTotal.report,
-         count:this.loadRepairTotal.reportTotal,
+         currentValue:this.loadRepairTotal.monthDealBS,
+         count:this.loadRepairTotal.monthTotalBS,
        },
      ]
-      this.listData=this.loadRepairTotal.repairRecordList;
+      this.listData=this.loadRepairTotal.repairList;
     }
 
   },
@@ -212,7 +212,7 @@ export default {
     }
     & .list{
       height: 80px;
-      width: 85%;
+      width: 100%;
       overflow: hidden;
       & li{
         height: 28px;
